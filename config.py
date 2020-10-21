@@ -1,3 +1,3 @@
 #PASSWORD FOR POSTGRESQL
-user_name ="yor user name"
-pwd ="your postgree pasword"
+user_name ="postgres"
+pwd ="nej3xa"

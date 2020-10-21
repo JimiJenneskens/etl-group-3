@@ -1,61 +1,48 @@
--- Let's drop tables if they already exists
-DROP TABLE IF EXISTS 
-   states_db,
-   gdp_db,
-   weather_db,
-   magic_town_db
-CASCADE;
-
--- Let's create the tables
+﻿-- Exported from QuickDBD: https://www.quickdatabasediagrams.com/
+-- Link to schema: https://app.quickdatabasediagrams.com/#/d/97lKgG
+-- NOTE! If you have used non-SQL datatypes in your design, you will have to change these here.
 
 
-CREATE TABLE states_db (
-	"abr_state" VARCHAR   NOT NULL,
-    "state" VARCHAR NOT NULL,
-    "id_state" INT  PRIMARY KEY   
+CREATE TABLE "magic_town" (
+    "id" int   NOT NULL,
+    "town" varchar   NOT NULL,
+    "year_entered" int   NOT NULL,
+    "id_state" int   NOT NULL,
+    CONSTRAINT "pk_magic_town" PRIMARY KEY (
+        "id"
+     )
 );
 
-CREATE TABLE weather_db (
-	"id_state" INT NOT NULL,
-	"state_w" VARCHAR   NOT NULL,
-    "year" INT   NOT NULL,
-    "precipitation" NUMERIC   NOT NULL,
-    "average_temperature" NUMERIC   NOT NULL,
-    "minimum_temperature" NUMERIC   NOT NULL,
-    "maximum_temperature" NUMERIC   NOT NULL,
-	PRIMARY KEY (id_state, year),
-	FOREIGN KEY (id_state) REFERENCES states_db (id_state)
+CREATE TABLE "states" (
+    "id" int   NOT NULL,
+    "state" varchar   NOT NULL,
+    "abr_state" varchar   NOT NULL,
+    CONSTRAINT "pk_states" PRIMARY KEY (
+        "id"
+     )
 );
 
-CREATE TABLE magic_town_db (
-	"id" INT  NOT NULL,
-	"town" VARCHAR NOT NULL,
-	"state_mt" VARCHAR   NOT NULL,
-    "year" INT   NOT NULL,
-	"id_state" INT NOT NULL,
-	FOREIGN KEY (id_state, year) REFERENCES weather_db (id_state, year),
-	FOREIGN KEY (id_state) REFERENCES states_db (id_state)
-	
+CREATE TABLE "gdp" (
+    "id_state" int   NOT NULL,
+    "tourism_gdp" numeric   NOT NULL,
+    "year" int   NOT NULL
 );
 
-CREATE TABLE gdp_db ( 			
-    "id_state" INT   NOT NULL,
-    "states" VARCHAR   NOT NULL,
-    "tourism_gdp" NUMERIC   NOT NULL,
-    "year" INT   NOT NULL,
-	FOREIGN KEY (id_state, year) REFERENCES weather_db(id_state, year),
-	FOREIGN KEY (id_state) REFERENCES states_db (id_state)
+CREATE TABLE "weather" (
+    "id_state" int   NOT NULL,
+    "year" int   NOT NULL,
+    "precipitation" numeric   NOT NULL,
+    "average_temperature" numeric   NOT NULL,
+    "minimum_temperature" numeric   NOT NULL,
+    "maximum_temperature" numeric   NOT NULL
 );
 
---LET'S CHECK THE DB
-SELECT * FROM states_db;
-SELECT * FROM weather_db;
-SELECT * FROM magic_town_db;
-SELECT * FROM gdp_db;
+ALTER TABLE "magic_town" ADD CONSTRAINT "fk_magic_town_id_state" FOREIGN KEY("id_state")
+REFERENCES "states" ("id");
 
+ALTER TABLE "gdp" ADD CONSTRAINT "fk_gdp_id_state" FOREIGN KEY("id_state")
+REFERENCES "states" ("id");
 
-
-
-
-
+ALTER TABLE "weather" ADD CONSTRAINT "fk_weather_id_state" FOREIGN KEY("id_state")
+REFERENCES "states" ("id");
 
